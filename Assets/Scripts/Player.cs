@@ -80,7 +80,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         if (!canMove)
         {
             var horizontalMovement = new Vector3(movement.x, 0f, 0f).normalized;
-            canMove = CanMove(horizontalMovement);
+            canMove = horizontalMovement.x != 0 && CanMove(horizontalMovement);
             if (canMove)
             {
                 movement = horizontalMovement;
@@ -88,7 +88,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
             else
             {
                 var verticalMovement = new Vector3(0f, 0f, movement.z).normalized;
-                canMove = CanMove(verticalMovement);
+                canMove = verticalMovement.z != 0 && CanMove(verticalMovement);
                 if (canMove)
                 {
                     movement = verticalMovement;
@@ -98,8 +98,8 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         if (_isWalking && canMove)
         {
             transform.position += MoveDistance() * movement;
-            transform.forward = Vector3.Slerp(transform.forward, movement, rotationSpeed * Time.deltaTime);
         }
+        transform.forward = Vector3.Slerp(transform.forward, movement, rotationSpeed * Time.deltaTime);
     }
 
     private bool CanMove(Vector3 direction)
