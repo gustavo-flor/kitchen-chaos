@@ -50,11 +50,11 @@ public class CuttingCounter : BaseCounter
         _cuttingProgress++;
         var progressNormalized = _cuttingProgress / recipe.cuttingProgressMax;
         OnProgressChanged?.Invoke(this, new OnProgressChangedEventArgs { ProgressNormalized = progressNormalized });
+        OnCut?.Invoke(this, EventArgs.Empty);
         if (_cuttingProgress < recipe.cuttingProgressMax)
         {
             return;
         }
-        OnCut?.Invoke(this, EventArgs.Empty);
         kitchenObject.DestroySelf();
         KitchenObject.Spawn(recipe.output, this);
     }
