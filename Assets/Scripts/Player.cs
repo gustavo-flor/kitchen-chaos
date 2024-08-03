@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IKitchenObjectParent
 {
     public static Player Instance { get; private set; }
     
@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private GameInput gameInput;
     [SerializeField] private LayerMask countersLayerMask;
+    [SerializeField] private Transform kitchenObjectHoldPoint;
 
     private const float PlayerRadius = .7f;
     private const float PlayerHeight = 2f;
@@ -18,6 +19,7 @@ public class Player : MonoBehaviour
     private bool _isWalking;
     private Vector3 _lastInteractionMovement;
     private ClearCounter _selectedCounter;
+    private KitchenObject _kitchenObject;
 
     public event EventHandler<OnCounterSelectChangeEventArgs> OnCounterSelectChange;
 
@@ -43,7 +45,7 @@ public class Player : MonoBehaviour
 
     private void OnInteractAction(object sender, EventArgs e)
     {
-        _selectedCounter?.Interact();
+        _selectedCounter?.Interact(this);
     }
 
     private void Update()
@@ -119,5 +121,30 @@ public class Player : MonoBehaviour
     {
         _selectedCounter = clearCounter;
         OnCounterSelectChange?.Invoke(this, new OnCounterSelectChangeEventArgs { ClearCounter = clearCounter });
+    }
+    
+    public Transform GetKitchenObjectFollowTransform()
+    {
+        return kitchenObjectHoldPoint;
+    }
+
+    public void SetKitchenObject(KitchenObject kitchenObject)
+    {
+        _kitchenObject = kitchenObject;
+    }
+
+    public KitchenObject GetKitchenObject()
+    {
+        return _kitchenObject;
+    }
+
+    public void ClearKitchenObject()
+    {
+        _kitchenObject = null;
+    }
+
+    public bool HasKitchenObject()
+    {
+        return _kitchenObject != null;
     }
 }
