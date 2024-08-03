@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -6,7 +7,15 @@ public class CuttingCounter : BaseCounter
 {
     [SerializeField] private CuttingRecipeSO[] cuttingRecipeSOs;
 
-    private int cuttingProgress;
+    private float _cuttingProgress;
+
+    public event EventHandler OnCut;
+    public event EventHandler<OnProgressChangedEventArgs> OnProgressChanged;
+
+    public class OnProgressChangedEventArgs : EventArgs
+    {
+        public float ProgressNormalized;
+    }
     
     public override void Interact(Player player)
     {
@@ -21,7 +30,8 @@ public class CuttingCounter : BaseCounter
         else if (HasKitchenObject() && !player.HasKitchenObject())
         {
             GetKitchenObject().SetKitchenObjectParent(player);
-            cuttingProgress = 0;
+            _cuttingProgress = 0;
+            OnProgressChanged?.Invoke(this, new OnProgressChangedEventArgs { ProgressNormalized = 0 });
         }
     }
 
@@ -37,11 +47,14 @@ public class CuttingCounter : BaseCounter
         {
             return;
         }
-        cuttingProgress++;
-        if (cuttingProgress < recipe.cuttingProgressMax)
+        _cuttingProgress++;
+        var progressNormalized = _cuttingProgress / recipe.cuttingProgressMax;
+        OnProgressChanged?.Invoke(this, new OnProgressChangedEventArgs { ProgressNormalized = progressNormalized });
+        if (_cuttingProgress < recipe.cuttingProgressMax)
         {
             return;
         }
+        OnCut?.Invoke(this, EventArgs.Empty);
         kitchenObject.DestroySelf();
         KitchenObject.Spawn(recipe.output, this);
     }
