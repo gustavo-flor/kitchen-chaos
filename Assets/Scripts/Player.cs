@@ -18,14 +18,14 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     private bool _isWalking;
     private Vector3 _lastInteractionMovement;
-    private ClearCounter _selectedCounter;
+    private BaseCounter _selectedCounter;
     private KitchenObject _kitchenObject;
 
     public event EventHandler<OnCounterSelectChangeEventArgs> OnCounterSelectChange;
 
     public class OnCounterSelectChangeEventArgs : EventArgs
     {
-        public ClearCounter ClearCounter;
+        public BaseCounter BaseCounter;
     }
 
     private void Awake()
@@ -63,9 +63,9 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         }
         if (Physics.Raycast(transform.position, _lastInteractionMovement, out RaycastHit hit, InteractionDistance, countersLayerMask))
         {
-            if (hit.transform.TryGetComponent(out ClearCounter clearCounter))
+            if (hit.transform.TryGetComponent(out BaseCounter baseCounter))
             {
-                SetSelectedCounter(clearCounter);
+                SetSelectedCounter(baseCounter);
                 return;
             }
         }
@@ -117,10 +117,10 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         return _isWalking;
     }
 
-    private void SetSelectedCounter(ClearCounter clearCounter)
+    private void SetSelectedCounter(BaseCounter baseCounter)
     {
-        _selectedCounter = clearCounter;
-        OnCounterSelectChange?.Invoke(this, new OnCounterSelectChangeEventArgs { ClearCounter = clearCounter });
+        _selectedCounter = baseCounter;
+        OnCounterSelectChange?.Invoke(this, new OnCounterSelectChangeEventArgs { BaseCounter = baseCounter });
     }
     
     public Transform GetKitchenObjectFollowTransform()
