@@ -1,12 +1,14 @@
 using UnityEngine;
 
-public abstract class BaseCounter : MonoBehaviour, IKitchenObjectParent
+public class BaseCounter : MonoBehaviour, IKitchenObjectParent
 {
     [SerializeField] private Transform counterTopPoint;
 
     private KitchenObject _kitchenObject; 
     
-    public abstract void Interact(Player player);
+    public virtual void Interact(Player player) {}
+
+    public virtual void InteractAlternate(Player player) {}
     
     public Transform GetKitchenObjectFollowTransform()
     {
