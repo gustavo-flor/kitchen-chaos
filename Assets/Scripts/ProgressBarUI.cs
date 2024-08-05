@@ -29,6 +29,10 @@ public class ProgressBarUI : MonoBehaviour
 
     private void LookAtMainCamera()
     {
-        transform.forward = new Vector3(transform.rotation.x, 0, transform.rotation.z);
+        var mainCamera = Camera.main;
+        if (mainCamera)
+        {
+            transform.forward = mainCamera.transform.forward;
+        }
     }
 }
