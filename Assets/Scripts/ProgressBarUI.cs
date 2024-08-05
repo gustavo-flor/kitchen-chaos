@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,20 +15,20 @@ public class ProgressBarUI : MonoBehaviour
     private void Start()
     {
         cuttingCounter.OnProgressChanged += OnProgressChanged;
-        
+
+        LookAtMainCamera();
         gameObject.SetActive(false);
     }
 
     private void OnProgressChanged(object sender, CuttingCounter.OnProgressChangedEventArgs e)
     {
         barImage.fillAmount = e.ProgressNormalized;
-        if (barImage.fillAmount == 0f || barImage.fillAmount == 1f)
-        {
-            gameObject.SetActive(false);
-        }
-        else
-        {
-            gameObject.SetActive(true);
-        }
+        var inProgress = barImage.fillAmount is not (0f or 1f);
+        gameObject.SetActive(inProgress);
+    }
+
+    private void LookAtMainCamera()
+    {
+        transform.forward = new Vector3(transform.rotation.x, 0, transform.rotation.z);
     }
 }
