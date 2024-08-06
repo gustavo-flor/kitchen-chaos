@@ -15,8 +15,6 @@ public class ProgressBarUI : MonoBehaviour
     private void Start()
     {
         cuttingCounter.OnProgressChanged += OnProgressChanged;
-
-        LookAtMainCamera();
         gameObject.SetActive(false);
     }
 
@@ -25,14 +23,5 @@ public class ProgressBarUI : MonoBehaviour
         barImage.fillAmount = e.ProgressNormalized;
         var inProgress = barImage.fillAmount is not (0f or 1f);
         gameObject.SetActive(inProgress);
-    }
-
-    private void LookAtMainCamera()
-    {
-        var mainCamera = Camera.main;
-        if (mainCamera)
-        {
-            transform.forward = mainCamera.transform.forward;
-        }
     }
 }
