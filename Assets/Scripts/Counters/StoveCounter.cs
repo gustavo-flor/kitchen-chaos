@@ -13,8 +13,12 @@ public class StoveCounter : BaseCounter, IHasProgress
 
     public override void Interact(Player player)
     {
-        if (!HasKitchenObject() && player.HasKitchenObject())
+        if (!HasKitchenObject())
         {
+            if (!player.HasKitchenObject())
+            {
+                return;
+            }
             var kitchenObject = player.GetKitchenObject();
             var recipe = GetRecipeByKitchenObject(kitchenObject.GetKitchenObjectSO());
             if (recipe is null)
@@ -25,8 +29,13 @@ public class StoveCounter : BaseCounter, IHasProgress
             _recipe = recipe;
             ResetFryingTimer();
         }
-        else if (HasKitchenObject() && !player.HasKitchenObject())
+        else
         {
+            if (player.HasKitchenObject())
+            {
+                player.TryAddIngredientOnPlate(GetKitchenObject());
+                return;
+            }
             GetKitchenObject().SetKitchenObjectParent(player);
             _recipe = null;
             ResetFryingTimer();

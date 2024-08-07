@@ -47,4 +47,30 @@ public class KitchenObject : MonoBehaviour
         _kitchenObjectParent.ClearKitchenObject();
         Destroy(gameObject);
     }
+
+    public bool TryGetPlate(out PlateKitchenObject plateKitchenObject)
+    {
+        if (this is PlateKitchenObject plate)
+        {
+            plateKitchenObject = plate;
+            return true;
+        }
+        plateKitchenObject = null;
+        return false;
+    }
+    
+    public bool TryAddIngredientOnPlate(KitchenObject kitchenObject)
+    {
+        var isPlate = TryGetPlate(out var plateKitchenObject);
+        if (!isPlate)
+        {
+            return false;
+        }
+        var ingredientAdded = plateKitchenObject.TryAddIngredient(kitchenObject.GetKitchenObjectSO());
+        if (ingredientAdded)
+        {
+            kitchenObject.DestroySelf();
+        }
+        return ingredientAdded;
+    }
 }

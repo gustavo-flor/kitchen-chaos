@@ -13,16 +13,25 @@ public class CuttingCounter : BaseCounter, IHasProgress
     
     public override void Interact(Player player)
     {
-        if (!HasKitchenObject() && player.HasKitchenObject())
+        if (!HasKitchenObject())
         {
+            if (!player.HasKitchenObject())
+            {
+                return;
+            }
             var kitchenObject = player.GetKitchenObject();
             if (HasRecipeWithInput(kitchenObject.GetKitchenObjectSO()))
             {
                 kitchenObject.SetKitchenObjectParent(this);
             }
         }
-        else if (HasKitchenObject() && !player.HasKitchenObject())
+        else
         {
+            if (player.HasKitchenObject())
+            {
+                player.TryAddIngredientOnPlate(GetKitchenObject());
+                return;
+            }
             GetKitchenObject().SetKitchenObjectParent(player);
             _cuttingProgress = 0;
             OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs { ProgressNormalized = 0 });

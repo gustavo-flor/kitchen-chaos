@@ -2,12 +2,24 @@ public class ClearCounter : BaseCounter
 {
     public override void Interact(Player player)
     {
-        if (!HasKitchenObject() && player.HasKitchenObject())
+        if (!HasKitchenObject())
         {
-            player.GetKitchenObject().SetKitchenObjectParent(this);
+            if (player.HasKitchenObject())
+            {
+                player.GetKitchenObject().SetKitchenObjectParent(this);
+            }
         }
-        else if (HasKitchenObject() && !player.HasKitchenObject())
+        else
         {
+            if (player.HasKitchenObject())
+            {
+                var ingredientAdded = player.TryAddIngredientOnPlate(GetKitchenObject());
+                if (!ingredientAdded)
+                {
+                    GetKitchenObject().TryAddIngredientOnPlate(player.GetKitchenObject());
+                }
+                return;
+            }
             GetKitchenObject().SetKitchenObjectParent(player);
         }
     }

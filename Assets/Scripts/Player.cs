@@ -153,4 +153,9 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     {
         return _kitchenObject != null;
     }
+
+    public bool TryAddIngredientOnPlate(KitchenObject kitchenObject)
+    {
+        return GetKitchenObject().TryAddIngredientOnPlate(kitchenObject);
+    }
 }

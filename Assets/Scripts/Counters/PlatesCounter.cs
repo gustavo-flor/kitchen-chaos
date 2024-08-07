@@ -25,6 +25,10 @@ public class PlatesCounter : BaseCounter
 
     private void Update()
     {
+        if (_platesAmount >= platesMaxAmount)
+        {
+            return;
+        }
         _spawnPlateTimer += Time.deltaTime;
         if (_spawnPlateTimer > spawnPlateCountdown)
         {
