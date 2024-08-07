@@ -1,21 +1,15 @@
 using System;
 using System.Linq;
-using JetBrains.Annotations;
 using UnityEngine;
 
-public class CuttingCounter : BaseCounter
+public class CuttingCounter : BaseCounter, IHasProgress
 {
     [SerializeField] private CuttingRecipeSO[] cuttingRecipeSOs;
 
     private float _cuttingProgress;
 
     public event EventHandler OnCut;
-    public event EventHandler<OnProgressChangedEventArgs> OnProgressChanged;
-
-    public class OnProgressChangedEventArgs : EventArgs
-    {
-        public float ProgressNormalized;
-    }
+    public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
     
     public override void Interact(Player player)
     {
@@ -31,7 +25,7 @@ public class CuttingCounter : BaseCounter
         {
             GetKitchenObject().SetKitchenObjectParent(player);
             _cuttingProgress = 0;
-            OnProgressChanged?.Invoke(this, new OnProgressChangedEventArgs { ProgressNormalized = 0 });
+            OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs { ProgressNormalized = 0 });
         }
     }
 
@@ -43,13 +37,13 @@ public class CuttingCounter : BaseCounter
         }
         var kitchenObject = GetKitchenObject();
         var recipe = GetRecipeByKitchenObject(kitchenObject.GetKitchenObjectSO());
-        if (recipe == null)
+        if (recipe is null)
         {
             return;
         }
         _cuttingProgress++;
         var progressNormalized = _cuttingProgress / recipe.cuttingProgressMax;
-        OnProgressChanged?.Invoke(this, new OnProgressChangedEventArgs { ProgressNormalized = progressNormalized });
+        OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs { ProgressNormalized = progressNormalized });
         OnCut?.Invoke(this, EventArgs.Empty);
         if (_cuttingProgress < recipe.cuttingProgressMax)
         {
