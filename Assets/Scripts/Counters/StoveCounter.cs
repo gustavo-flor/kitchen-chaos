@@ -33,7 +33,12 @@ public class StoveCounter : BaseCounter, IHasProgress
         {
             if (player.HasKitchenObject())
             {
-                player.TryAddIngredientOnPlate(GetKitchenObject());
+                var ingredientAdded = player.TryAddIngredientOnPlate(GetKitchenObject());
+                if (ingredientAdded)
+                {
+                    _recipe = null;
+                    ResetFryingTimer();
+                }
                 return;
             }
             GetKitchenObject().SetKitchenObjectParent(player);
