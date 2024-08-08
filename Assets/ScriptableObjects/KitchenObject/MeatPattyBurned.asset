@@ -15,3 +15,4 @@ MonoBehaviour:
   prefab: {fileID: 5468346784437004878, guid: 2dc20ef43cb348e4da1c50ddbf04a876, type: 3}
   sprite: {fileID: 21300000, guid: 713ea9afa60dd6e4ebf6503a33e8cc99, type: 3}
   objectName: Meat Patty Burned
+  deliverableIngredient: 1

@@ -61,8 +61,8 @@ public class KitchenObject : MonoBehaviour
     
     public bool TryAddIngredientOnPlate(KitchenObject kitchenObject)
     {
-        var isPlate = TryGetPlate(out var plateKitchenObject);
-        if (!isPlate)
+        var hasPlate = TryGetPlate(out var plateKitchenObject);
+        if (!hasPlate)
         {
             return false;
         }
