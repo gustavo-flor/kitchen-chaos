@@ -9,6 +9,7 @@ public class DeliveryCounter : BaseCounter
             {
                 return;
             }
+            DeliveryManager.Instance.DeliverRecipe(plateKitchenObject);
             plateKitchenObject.DestroySelf();
         }
     }

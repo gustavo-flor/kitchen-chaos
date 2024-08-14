@@ -3,33 +3,33 @@ using System.Collections.Generic;
 
 public class PlateKitchenObject : KitchenObject
 {
-    private List<KitchenObjectSO> _kitchenObjectSOs;
+    private List<KitchenObjectSO> _ingredients;
 
     public event EventHandler<OnIngredientAddedEventArgs> OnIngredientAdded;
 
     public class OnIngredientAddedEventArgs : EventArgs
     {
-        public KitchenObjectSO KitchenObjectSO;
+        public KitchenObjectSO Ingredients;
     }
 
     private void Awake()
     {
-        _kitchenObjectSOs = new List<KitchenObjectSO>();
+        _ingredients = new List<KitchenObjectSO>();
     }
 
     public bool TryAddIngredient(KitchenObjectSO kitchenObjectSO)
     {
-        if (!kitchenObjectSO.deliverableIngredient || _kitchenObjectSOs.Contains(kitchenObjectSO))
+        if (!kitchenObjectSO.deliverableIngredient || _ingredients.Contains(kitchenObjectSO))
         {
             return false;
         }
-        _kitchenObjectSOs.Add(kitchenObjectSO);
-        OnIngredientAdded?.Invoke(this, new OnIngredientAddedEventArgs { KitchenObjectSO = kitchenObjectSO });
+        _ingredients.Add(kitchenObjectSO);
+        OnIngredientAdded?.Invoke(this, new OnIngredientAddedEventArgs { Ingredients = kitchenObjectSO });
         return true;
     }
 
-    public List<KitchenObjectSO> GetKitchenObjectSOs()
+    public List<KitchenObjectSO> GetIngredients()
     {
-        return _kitchenObjectSOs;
+        return _ingredients;
     }
 }
